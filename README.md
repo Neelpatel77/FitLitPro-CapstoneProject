@@ -1,4 +1,4 @@
-INFO 6134- Capstone Project
+
 # FitLitPro-CapstoneProject
 Capstone Project - Neel Patel_Group16
 Group -16
@@ -43,7 +43,8 @@ Date: Sep 27, 2023
 
 4. [Conclusion](#conclusion)
    4.1 [Summary](#summary)
-   4.2 [Next Steps and Milestones](#next-steps-and-milestones)
+   4.2 [Tools and Technology](#Tools and Technology)
+   4.3 [Next Steps and Milestones](#next-steps-and-milestones)
 
 ---
 
@@ -128,6 +129,17 @@ The development environment for this project centers around utilizing React Nati
 #### Summary
 
 The fitness app addresses the need for a comprehensive and user-centric tool to support individuals in achieving their health and fitness goals. By combining personalized tracking, efficient task management, and data-driven progress monitoring, the app aims to empower users on their fitness journeys.
+
+#### Tools and Technologies
+
+- **Development Framework:** React Native
+- **Database Platform:** Firebase (Real-time Database, Authentication, Cloud Firestore, Storage, Push Notifications)
+- **Version Control:** Git
+- **Integrated Development Environment (IDE):** Visual Studio Code
+- **GitHub GUI:** GitHub Desktop
+- **Project Hosting (Optional):** Firebase Hosting (for web deployment, if needed)
+- **Communication and Collaboration:** Slack, FOL Groups
+
 
 #### Next Steps and Milestones
 
