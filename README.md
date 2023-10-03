@@ -114,7 +114,7 @@ The development environment for this project centers around utilizing React Nati
 - Authentication
 - Cloud Firestore
 - Storage
-- Push Notifications
+
 
 ### 4. Conclusion
 
