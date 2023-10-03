@@ -27,13 +27,11 @@ Date: Sep 27, 2023
    2.2 [Weight Tracker](#weight-tracker)
    2.3 [BMI Calculator](#bmi-calculator)
    2.4 [To-Do List](#to-do-list)
-   2.5 [Exercise and Calorie Tracker](#exercise-and-calorie-tracker)
-   2.6 [Progress Graphs and Charts](#progress-graphs-and-charts)
-   2.7 [Goal Setting and Tracking](#goal-setting-and-tracking)
-   2.8 [Water Intake Tracker](#water-intake-tracker)
-   2.9 [Sleep Tracker](#sleep-tracker)
-   2.10 [Meal Time Reminders](#meal-time-reminders)
-
+   2.5 [Progress Graphs and Charts](#progress-graphs-and-charts)
+   2.6 [Goal Setting and Tracking](#goal-setting-and-tracking)
+   2.7 [Water Intake Tracker](#water-intake-tracker)
+   2.8 [Sleep Tracker](#sleep-tracker)
+ 
 3. [Firebase Integration](#firebase-integration)
    3.1 [Real-time Database](#real-time-database)
    3.2 [Authentication](#authentication)
@@ -90,19 +88,15 @@ The development environment for this project centers around utilizing React Nati
 
 - Enable users to create and manage a task list for their fitness routines and goals.
 
-#### e) Exercise and Calorie Tracker
 
-- Allow users to log exercises they perform.
-- Display calories burned for each exercise on a daily basis.
-- Show a weekly summary of calories burned in a pie chart.
 
 #### f) Progress Graphs and Charts
 
-- Display visual representations of the user's progress over time (e.g., weight loss/gain, calorie intake, exercise frequency).
+- Display visual representations of the user's progress over time (e.g., weight loss/gain).
 
 #### g) Goal Setting and Tracking
 
-- Allow users to set specific fitness goals (e.g., weight loss target, calorie intake goal) and track their progress towards achieving them.
+- Allow users to set specific fitness goals (e.g., weight loss target, calorie intake goal) and track their progress towards achieving them).
 
 #### h) Water Intake Tracker
 
@@ -112,9 +106,7 @@ The development environment for this project centers around utilizing React Nati
 
 - Allow users to record and monitor their sleep patterns to promote better sleep quality.
 
-#### j) Meal Time Reminders
 
-- Allow users to set reminders for regular meal times to promote a consistent eating schedule.
 
 ### 3. Firebase Integration
 
