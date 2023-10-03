@@ -28,7 +28,7 @@ Date: Sep 27, 2023
    2.3 [BMI Calculator](#bmi-calculator)
    2.4 [To-Do List](#to-do-list)
    2.5 [Progress Graphs and Charts](#progress-graphs-and-charts)
-   2.6 [Goal Setting and Tracking](#goal-setting-and-tracking)
+   2.6 [Gamification](#goal-setting-and-tracking)
    2.7 [Water Intake Tracker](#water-intake-tracker)
    2.8 [Sleep Tracker](#sleep-tracker)
  
@@ -94,9 +94,9 @@ The development environment for this project centers around utilizing React Nati
 
 - Display visual representations of the user's progress over time (e.g., weight loss/gain).
 
-#### g) Goal Setting and Tracking
+#### g) Gamification
 
-- Allow users to set specific fitness goals (e.g., weight loss target, calorie intake goal) and track their progress towards achieving them).
+-Allow user to get fun and make fitness intresting by earning points when they user do a certain exersise.
 
 #### h) Water Intake Tracker
 
