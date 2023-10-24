@@ -60,6 +60,7 @@ const NutritionComponent = () => {
         value={foodItem}
         onChangeText={setFoodItem}
       />
+      <Text style={styles.infoText}>The calories are for 100gms</Text>
       <Button title="Fetch Nutritional Info" onPress={fetchFoodData} />
       {foodData ? (
         <View style={styles.infoContainer}>
@@ -90,6 +91,10 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     marginBottom: 10,
   },
+  infoText: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
   infoContainer: {
     alignItems: 'center',
     marginTop: 20,
@@ -102,4 +107,3 @@ const styles = StyleSheet.create({
 });
 
 export default NutritionComponent;
-
