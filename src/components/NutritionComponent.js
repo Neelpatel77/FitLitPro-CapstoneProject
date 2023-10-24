@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 const NutritionComponent = () => {
   const [foodData, setFoodData] = useState(null);
   const [foodItem, setFoodItem] = useState(''); 
-  const apiKey = 'SR4wOccLcocxfnaGpluh3RlkvcMtTqcjUEIW';  
+  const apiKey = 'SR4wOccLcocxfnaGpluh3Rlkvc7iSqMtTqcjUEIW';  
 
   useEffect(() => {
     if (foodItem) {
