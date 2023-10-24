@@ -15,6 +15,9 @@ const BodyMassIndexCalculator = () => {
     const weightInKg = parseFloat(bodyWeight);
     const heightInM = parseFloat(bodyHeight) / 100;
 
+
+
+
     const calculatedBMI = weightInKg / (heightInM * heightInM);
     const calculatedBMIRounded = calculatedBMI.toFixed(2);
     setBmiResult(calculatedBMIRounded);
@@ -49,10 +52,10 @@ const BodyMassIndexCalculator = () => {
       console.error('Error clearing data:', error);
     }
   };
-
   useEffect(() => {
     loadBMIData();
   }, []);
+
 
   const loadBMIData = async () => {
     try {
@@ -71,6 +74,9 @@ const BodyMassIndexCalculator = () => {
     }
   };
 
+
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Body Mass Index Calculator</Text>
@@ -81,6 +87,10 @@ const BodyMassIndexCalculator = () => {
         onChangeText={(text) => setBodyWeight(text)}
         keyboardType="numeric"
       />
+
+
+
+
       <TextInput
         style={styles.input}
         placeholder="Height (cm)"
@@ -101,6 +111,11 @@ const BodyMassIndexCalculator = () => {
   );
 };
 
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     padding: 16,
@@ -108,6 +123,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 16,
   },
+
+
   header: {
     fontSize: 18,
     fontWeight: 'bold',
