@@ -6,14 +6,7 @@ const NutritionComponent = () => {
   const [foodItem, setFoodItem] = useState('');
   const apiKey = 'SR4wOccLcocxfnaGpluh3Rlkvc7iSqMtTqcjUEIW';
 
-  useEffect(() => {
-    if (foodItem) {
-      fetchFoodData();
-    }
-  }, [foodItem]);
-
   const findCalories = (nutrients) => {
-    // Iterate through nutrients to find calories
     const calorieNutrient = nutrients.find(
       (nutrient) =>
         nutrient.nutrientId === 1008 || nutrient.nutrientName.toLowerCase() === 'energy'
@@ -23,21 +16,35 @@ const NutritionComponent = () => {
 
   const fetchFoodData = async () => {
     try {
+      if (!foodItem) {
+        // Clear food data when search bar is empty
+        setFoodData(null);
+        return;
+      }
+
       const response = await fetch(
         `https://api.nal.usda.gov/fdc/v1/foods/search?query=${foodItem}&api_key=${apiKey}`
       );
       const data = await response.json();
+
       if (data.foods && data.foods.length > 0) {
-        const foodItemData = data.foods[0];
-        const calorieNutrient = findCalories(foodItemData.foodNutrients);
-        if (calorieNutrient) {
-          // Convert units to kcal if necessary
-          const caloriesInKcal = calorieNutrient.value;
-          setFoodData({ ...foodItemData, calories: caloriesInKcal });
+        // Ensure the retrieved data corresponds to the correct food item
+        const matchingFoodItem = data.foods.find(food => food.description.toLowerCase() === foodItem.toLowerCase());
+        
+        if (matchingFoodItem) {
+          const calorieNutrient = findCalories(matchingFoodItem.foodNutrients);
+          if (calorieNutrient) {
+            const caloriesInKcal = calorieNutrient.value;
+            setFoodData({ ...matchingFoodItem, calories: caloriesInKcal });
+          } else {
+            setFoodData({ ...matchingFoodItem, calories: 'N/A' });
+          }
         } else {
-          setFoodData({ ...foodItemData, calories: 'N/A' });
+          // Clear food data when no exact matching food item is found
+          setFoodData(null);
         }
       } else {
+        // Clear food data when no matching food item is found
         setFoodData(null);
       }
     } catch (error) {
@@ -49,7 +56,7 @@ const NutritionComponent = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Enter a food item"
+        placeholder="Enter a food item (e.g., 'apple', 'pizza', 'chicken')"
         value={foodItem}
         onChangeText={setFoodItem}
       />
@@ -95,3 +102,4 @@ const styles = StyleSheet.create({
 });
 
 export default NutritionComponent;
+
