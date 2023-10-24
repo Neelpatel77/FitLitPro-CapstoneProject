@@ -3,14 +3,23 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const NutritionComponent = () => {
   const [foodData, setFoodData] = useState(null);
-  const [foodItem, setFoodItem] = useState(''); 
-  const apiKey = 'SR4wOccLcocxfnaGpluh3Rlkvc7iSqMtTqcjUEIW';  
+  const [foodItem, setFoodItem] = useState('');
+  const apiKey = 'SR4wOccLcocxfnaGpluh3Rlkvc7iSqMtTqcjUEIW';
 
   useEffect(() => {
     if (foodItem) {
       fetchFoodData();
     }
-  }, [foodItem]); 
+  }, [foodItem]);
+
+  const findCalories = (nutrients) => {
+    // Iterate through nutrients to find calories
+    const calorieNutrient = nutrients.find(
+      (nutrient) =>
+        nutrient.nutrientId === 1008 || nutrient.nutrientName.toLowerCase() === 'energy'
+    );
+    return calorieNutrient;
+  };
 
   const fetchFoodData = async () => {
     try {
@@ -19,9 +28,17 @@ const NutritionComponent = () => {
       );
       const data = await response.json();
       if (data.foods && data.foods.length > 0) {
-        setFoodData(data.foods[0]);
+        const foodItemData = data.foods[0];
+        const calorieNutrient = findCalories(foodItemData.foodNutrients);
+        if (calorieNutrient) {
+          // Convert units to kcal if necessary
+          const caloriesInKcal = calorieNutrient.value;
+          setFoodData({ ...foodItemData, calories: caloriesInKcal });
+        } else {
+          setFoodData({ ...foodItemData, calories: 'N/A' });
+        }
       } else {
-        setFoodData(null);  
+        setFoodData(null);
       }
     } catch (error) {
       console.error('Error fetching food data:', error);
@@ -40,15 +57,9 @@ const NutritionComponent = () => {
       {foodData ? (
         <View style={styles.infoContainer}>
           <Text style={styles.foodName}>{foodData.description}</Text>
-          {foodData.foodNutrients && foodData.foodNutrients.length > 0 ? (
-            <Text>
-              Calories: {foodData.foodNutrients[0].value}{' '}
-              {foodData.foodNutrients[0].unitName}
-            </Text>
-          ) : (
-            <Text>No nutritional information available</Text>
-          )}
-
+          <Text>
+            Calories: {foodData.calories} kcal
+          </Text>
         </View>
       ) : (
         <Text>No data</Text>
@@ -64,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  
+
   input: {
     width: '100%',
     padding: 10,
