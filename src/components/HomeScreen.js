@@ -47,10 +47,6 @@ const HomeScreen = ({ navigation }) => {
           <Text style={customStyles.subheader}>Your Fitness Dashboard</Text>
         </View>
 
-        <TouchableOpacity style={customStyles.trackersButton} onPress={navigateToTrackers}>
-          <Text style={customStyles.trackersButtonText}>Trackers</Text>
-        </TouchableOpacity>
-
         <View style={customStyles.sectionContainer}>
           <View style={customStyles.sectionHeader}>
             <Text style={customStyles.sectionTitle}>Nutrition Information</Text>
