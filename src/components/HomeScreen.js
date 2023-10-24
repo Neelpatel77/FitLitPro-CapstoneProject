@@ -14,9 +14,6 @@ const HomeScreen = ({ navigation }) => {
     }).start();
   }, []);
 
-  const navigateToTrackers = () => {
-    navigation.navigate('Trackers');
-  };
 
   const [waterPercentage, setWaterPercentage] = useState('70%');
   const [sleepPercentage, setSleepPercentage] = useState('85%');
