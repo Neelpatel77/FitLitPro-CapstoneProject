@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './HomeScreen';
 import ProgressTracker from './ProgressTracker';
 import BMICalculatorScreen from './BMICalculator';
-import TodoList from './TodoList'; // If you have a 'TodoList' screen
+import TodoList from './TodoList'; 
 
 const Stack = createStackNavigator();
 
