@@ -3,6 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, Modal, StyleSheet, K
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 
+
+
+
+//added firebase
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDc4xIj_02uYTR2ylwg-P7GlMUsF_aJN-I",
