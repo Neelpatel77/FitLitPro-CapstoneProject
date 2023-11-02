@@ -60,7 +60,6 @@ const NutritionComponent = () => {
         value={foodItem}
         onChangeText={setFoodItem}
       />
-      <Text style={styles.infoText}>The calories are for 100gms Portion</Text>
       <Button title="Fetch Nutritional Info" onPress={fetchFoodData} />
       {foodData ? (
         <View style={styles.infoContainer}>
