@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 const NutritionComponent = () => {
@@ -67,6 +67,9 @@ const NutritionComponent = () => {
           <Text style={styles.foodName}>{foodData.description}</Text>
           <Text>
             Calories: {foodData.calories} kcal
+          </Text>
+          <Text>
+            Serving Size: {foodData.servingSize} {foodData.servingSizeUnit}
           </Text>
         </View>
       ) : (
