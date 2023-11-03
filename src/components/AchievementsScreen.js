@@ -14,9 +14,9 @@ const AchievementsScreen = ({ route }) => {
    ];
 
   const pointMilestones = [
-    { points: 500, title: 'Bronze Achiever' },
-    { points: 1000, title: 'Silver Achiever' },
-    { points: 1500, title: 'Gold Achiever' },
+    { points: 50, title: 'Points will be deducted per redeem' },
+    { points: 50, title: 'is the minimum balance required to redeem' },
+
    ];
 
   const fitnessActivities = [
@@ -107,8 +107,7 @@ const AchievementsScreen = ({ route }) => {
       style={styles.achievementItem}
       onPress={() => setSelectedAchievement(item)}
     >
-      {/* ... (your achievement item content) */}
-    </TouchableOpacity>
+     </TouchableOpacity>
   );
 
   const renderFitnessActivity = ({ item }) => (
@@ -122,14 +121,30 @@ const AchievementsScreen = ({ route }) => {
   );
 
   const redeemReward = (rewardPoints) => {
-    if (userScore >= rewardPoints) {
-      setUserScore(userScore - rewardPoints);
-      setTotalRedeemPoints(totalRedeemPoints + rewardPoints);
-      alert('Reward redeemed! Enjoy your prize!');
-    } else {
-      alert('Not enough points to redeem this reward.');
-    }
+    Alert.alert(
+      'Redeem Reward',
+      `Are you sure you want to redeem your points for ${rewardPoints} points?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            if (userScore >= rewardPoints) {
+              setUserScore(userScore - rewardPoints);
+              setTotalRedeemPoints(totalRedeemPoints + rewardPoints);
+              alert('Reward redeemed! Enjoy your prize!');
+            } else {
+              alert('Not enough points to redeem this reward.');
+            }
+          },
+        },
+      ],
+    );
   };
+  
 
   return (
     <View style={styles.container}>
@@ -160,11 +175,10 @@ const AchievementsScreen = ({ route }) => {
           Your Points: {userScore}
         </Animated.Text>
 
-        {/* Milestones */}
-        <View style={styles.milestonesContainer}>
+         <View style={styles.milestonesContainer}>
           {pointMilestones.map((milestone, index) => (
             <Text key={index} style={styles.milestoneText}>
-              {`Achieve ${milestone.points} points and earn ${milestone.title}`}
+              {` ${milestone.points}  ${milestone.title}`}
             </Text>
           ))}
         </View>
@@ -175,8 +189,7 @@ const AchievementsScreen = ({ route }) => {
         />
       </View>
 
-      {/* Reset Button */}
-      <Button
+       <Button
         title="Reset Points"
         onPress={resetData}
       />
