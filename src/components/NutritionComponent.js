@@ -56,7 +56,7 @@ const NutritionComponent = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Enter a food item (e.g., 'apple', 'pizza', 'chicken')"
+        placeholder="Enter a food item (e.g. 'apple')"
         value={foodItem}
         onChangeText={setFoodItem}
       />
@@ -72,7 +72,7 @@ const NutritionComponent = () => {
           </Text>
         </View>
       ) : (
-        <Text>No data</Text>
+        <Text>Enter a value / Please enter a valid food name</Text>
       )}
     </View>
   );
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   infoContainer: {
+    backgroundColor: 'red' ,
     alignItems: 'center',
     marginTop: 20,
   },
