@@ -1,0 +1,6 @@
+Change functionality of the weight tracker it will take one string and one numerical value and the graph will change the points accordingly from high to low changes that's the fuctionality 
+I want and the current is that it showes me the value ( x, y) which i don't want the value will be changed by the proportion let say i had 50 kg wight and now it is 55 so it will do 
+point at 50 then 55 menas it shold plot the next point since wight is incerased so above 50 since 55 is bigger than 50. This is how the conponent should work
+to be clear it is kinda like (wight tracker ). YOu must keep all other fucntionality as it is just change the graph ploting calculation which i showd is correct one
+NOTE : there are two text fields one is expection a string and second is number, 1) you must ensure in first text fild user enter stifng not a number and should not be empty
+2) in second user must enter a numerical value doensn't matter if fractional but must not be stirng and must not be empty 
