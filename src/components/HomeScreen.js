@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Animated, ScrollView, StyleSheet, TouchableOpacity, PanResponder } from 'react-native';
-import NutritionComponent from './NutritionComponent'; 
+import { View, Text, Animated, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import Slider from '@react-native-community/slider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NutritionComponent from './NutritionComponent';
+
+// ... rest of your component code ...
 
 const HomeScreen = ({ navigation }) => {
   const scaleValue = new Animated.Value(0);
+  const [waterIntake, setWaterIntake] = useState(0);
+  const [sleepDuration, setSleepDuration] = useState(0);
+  const [waterPercentage, setWaterPercentage] = useState('0%');
+  const [sleepPercentage, setSleepPercentage] = useState('0%');
+  const [waterHistory, setWaterHistory] = useState([]);
+  const [sleepHistory, setSleepHistory] = useState([]);
 
   useEffect(() => {
     Animated.spring(scaleValue, {
@@ -12,59 +22,120 @@ const HomeScreen = ({ navigation }) => {
       tension: 40,
       useNativeDriver: true,
     }).start();
+    loadData();
   }, []);
 
+  const loadData = async () => {
+    const today = new Date().toISOString().split('T')[0];
+    let newWaterHistory = [];
+    let newSleepHistory = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateString = date.toISOString().split('T')[0];
 
-  const [waterPercentage, setWaterPercentage] = useState('70%');
-  const [sleepPercentage, setSleepPercentage] = useState('85%');
+      const storedWater = await AsyncStorage.getItem(`@water_${dateString}`);
+      const storedSleep = await AsyncStorage.getItem(`@sleep_${dateString}`);
 
-  const waterPanResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => {
-      const newPercentage = Math.max(0, Math.min(100, gestureState.moveY / 1.5));
-      setWaterPercentage(newPercentage.toFixed(0) + '%');
-    },
-  });
+      if (storedWater) {
+        newWaterHistory.push({ date: dateString, value: storedWater });
+      }
+      if (storedSleep) {
+        newSleepHistory.push({ date: dateString, value: storedSleep });
+      }
+    }
+    setWaterHistory(newWaterHistory);
+    setSleepHistory(newSleepHistory);
 
-  const sleepPanResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => {
-      const newPercentage = Math.max(0, Math.min(100, gestureState.moveY / 1.5));
-      setSleepPercentage(newPercentage.toFixed(0) + '%');
-    },
-  });
+    // Load today's data to display in the tracker
+    const todayWater = await AsyncStorage.getItem(`@water_${today}`);
+    const todaySleep = await AsyncStorage.getItem(`@sleep_${today}`);
+    if (todayWater) {
+      setWaterIntake(parseFloat(todayWater));
+      setWaterPercentage(`${(parseFloat(todayWater) / 4 * 100).toFixed(0)}%`);
+    }
+    if (todaySleep) {
+      setSleepDuration(parseFloat(todaySleep));
+      setSleepPercentage(`${(parseFloat(todaySleep) / 8 * 100).toFixed(0)}%`);
+    }
+  };
+
+
+  const saveData = async (type, value) => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      await AsyncStorage.setItem(`@${type}_${today}`, value.toString());
+      loadData(); // Reload data to update history
+    } catch (e) {
+      // handle error
+      console.error(e);
+    }
+  };
+
+  const handleWaterChange = (value) => {
+    setWaterIntake(value);
+    setWaterPercentage(`${(value / 4 * 100).toFixed(0)}%`);
+    saveData('water', value);
+  };
+
+  const handleSleepChange = (value) => {
+    setSleepDuration(value);
+    setSleepPercentage(`${(value / 8 * 100).toFixed(0)}%`);
+    saveData('sleep', value);
+  };
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
-        <View style={customStyles.headerContainer}>
-          <Animated.Text style={[customStyles.header, { transform: [{ scale: scaleValue }] }]}>
-            FitLit Pro by Neel Patel!
-          </Animated.Text>
-          <Text style={customStyles.subheader}>Your Fitness Dashboard</Text>
-        </View>
+    <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+      <View style={customStyles.headerContainer}>
+        <Animated.Text style={[customStyles.header, { transform: [{ scale: scaleValue }] }]}>
+          FitLit Pro by Neel Patel!
+        </Animated.Text>
+        <Text style={customStyles.subheader}>Your Fitness Dashboard</Text>
+      </View>
 
-        <View style={customStyles.sectionContainer}>
-          <View style={customStyles.sectionHeader}>
-            <Text style={customStyles.sectionTitle}>Nutrition Information</Text>
-          </View>
+      <View style={customStyles.sectionContainer}>
           <NutritionComponent />
         </View>
 
-        <View style={customStyles.trackerContainer} {...waterPanResponder.panHandlers}>
+        
+        {/* Water Tracker */}
+        <View style={customStyles.trackerContainer}>
           <Text style={customStyles.trackerTitle}>Water Tracker</Text>
+          <Text style={customStyles.trackerInfo}>Current Intake: {waterIntake.toFixed(1)} Liters</Text>
+          <Slider
+            style={{ width: '100%', height: 40 }}
+            minimumValue={0}
+            maximumValue={4}
+            step={0.1}
+            value={waterIntake}
+            onValueChange={handleWaterChange}
+            minimumTrackTintColor="#007BFF"
+            maximumTrackTintColor="#000000"
+          />
           <View style={customStyles.trackerCircle}>
             <Text style={customStyles.trackerPercentage}>{waterPercentage}</Text>
           </View>
         </View>
 
-        <View style={customStyles.trackerContainer} {...sleepPanResponder.panHandlers}>
+{/* Sleep Tracker */}
+<View style={customStyles.trackerContainer}>
           <Text style={customStyles.trackerTitle}>Sleep Tracker</Text>
+          <Text style={customStyles.trackerInfo}>Duration: {sleepDuration.toFixed(1)} hrs</Text>
+          <Slider
+            style={{ width: '100%', height: 40 }}
+            minimumValue={0}
+            maximumValue={8}
+            step={0.1}
+            value={sleepDuration}
+            onValueChange={handleSleepChange}
+            minimumTrackTintColor="#007BFF"
+            maximumTrackTintColor="#000000"
+          />
           <View style={customStyles.trackerCircle}>
             <Text style={customStyles.trackerPercentage}>{sleepPercentage}</Text>
           </View>
         </View>
-
       </ScrollView>
     </View>
   );
@@ -97,19 +168,6 @@ const customStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  trackersButton: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  trackersButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   trackerContainer: {
     marginBottom: 30,
   },
@@ -117,21 +175,25 @@ const customStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
   },
   trackerCircle: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 100, // Adjusted width and height
+    height: 100,
+    borderRadius: 50,
     backgroundColor: '#007BFF',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
+    marginBottom: 20,
   },
   trackerPercentage: {
-    fontSize: 30,
+    fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
   },
+ 
 });
+
 
 export default HomeScreen;
