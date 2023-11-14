@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { VictoryLine, VictoryChart, VictoryAxis } from 'victory-native';
+
 import { LineChart } from 'react-native-chart-kit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,16 +55,21 @@ const ProgressTracker = () => {
     labels: dataEntries.map((entry) => new Date(entry.date).toLocaleDateString()),
     datasets: [
       {
-        data: dataEntries.map((entry) => parseFloat(entry.value)),
+        data: dataEntries.map((entry) => {
+          const value = parseFloat(entry.value);
+          return isNaN(value) || !isFinite(value) ? 0 : value; 
+        }),
       },
     ],
   };
+  
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <ScrollView>
+<KeyboardAvoidingView style={styles.container} behavior="padding">
+  <FlatList
+    ListHeaderComponent={
+      <>
         <Text style={styles.header}>Progress Tracker</Text>
-
         <View style={styles.datePickerContainer}>
           <DateTimePicker
             value={selectedDate}
@@ -71,14 +78,12 @@ const ProgressTracker = () => {
             onChange={(event, date) => setSelectedDate(date || selectedDate)}
           />
         </View>
-
         <TextInput
           style={styles.input}
           value={measurement}
           onChangeText={setMeasurement}
           placeholder="Enter Measurement (e.g., Weight, Waist)"
         />
-
         <TextInput
           style={styles.input}
           value={value}
@@ -86,49 +91,60 @@ const ProgressTracker = () => {
           keyboardType="numeric"
           placeholder="Enter Value"
         />
-
         <TouchableOpacity
           style={styles.saveButton}
           onPress={saveEntry}
         >
           <Text style={styles.buttonText}>Save Entry</Text>
         </TouchableOpacity>
-
-        <FlatList
-          data={dataEntries}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View style={styles.dataEntry}>
-              <Text>{new Date(item.date).toLocaleDateString()} - {item.measurement}: {item.value}</Text>
-              <TouchableOpacity onPress={() => deleteEntry(index)}>
-                <Text style={styles.deleteText}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-
-        <View style={styles.chartContainer}>
-          <LineChart
-            data={chartData}
-            width={300}
-            height={200}
-            chartConfig={{
-              backgroundGradientFrom: '#fff',
-              backgroundGradientTo: '#fff',
-              decimalPlaces: 2,
-              color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-            }}
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Back to Home</Text>
+      </>
+    }
+    data={dataEntries}
+    keyExtractor={(_, index) => index.toString()}
+    renderItem={({ item, index }) => (
+      <View style={styles.dataEntry}>
+        <Text>{new Date(item.date).toLocaleDateString()} - {item.measurement}: {item.value}</Text>
+        <TouchableOpacity onPress={() => deleteEntry(index)}>
+          <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    )}
+    ListFooterComponent={
+      <View style={styles.chartContainer}>
+  <VictoryChart>
+    <VictoryLine
+      data={dataEntries.map((entry) => {
+        // Convert value to a number and check if it's a valid number
+        const numericValue = parseFloat(entry.value);
+        return {
+          x: new Date(entry.date),
+          y: isNaN(numericValue) ? 0 : numericValue, // Use 0 or any other default for invalid numbers
+        };
+      })}
+      style={{
+        data: { stroke: "#c43a31" }
+      }}
+    />
+    <VictoryAxis
+      fixLabelOverlap={true}
+      style={{
+        axisLabel: { padding: 30 }
+      }}
+      tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
+    />
+  </VictoryChart>
+  <TouchableOpacity
+    style={styles.backButton}
+    onPress={() => navigation.goBack()}
+  >
+    <Text style={styles.buttonText}>Back to Home</Text>
+  </TouchableOpacity>
+</View>
+
+    }
+  />
+</KeyboardAvoidingView>
+
   );
 };
 

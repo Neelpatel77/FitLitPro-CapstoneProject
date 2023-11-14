@@ -95,7 +95,9 @@ const TodoList = ({ addTaskToAchievement }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <ScrollView>
+  <FlatList
+    ListHeaderComponent={
+      <>
         <Text style={styles.header}>Fitness task List</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -111,39 +113,39 @@ const TodoList = ({ addTaskToAchievement }) => {
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => toggleTaskDone(item.id)}
-              style={styles.taskItem}
-            >
-              <View style={styles.taskTextContainer}>
-                <Text style={[styles.taskText, item.done && styles.doneText]}>{item.description}</Text>
-              </View>
-              <TouchableOpacity onPress={() => showDeleteConfirmationModal(item.id)}>
-                <Text style={styles.deleteText}>Delete</Text>
-              </TouchableOpacity>
-
-            </TouchableOpacity>
-          )}
-        />
-        
-        <Modal visible={showDeleteConfirmation} animationType="slide">
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>Are you sure you want to delete this task?</Text>
-            <TouchableOpacity onPress={deleteTask} style={styles.deleteButton}>
-              <Text style={styles.buttonText}>Delete</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
+      </>
+    }
+    data={tasks}
+    keyExtractor={(item) => item.id}
+    renderItem={({ item }) => (
+      <TouchableOpacity
+        onPress={() => toggleTaskDone(item.id)}
+        style={styles.taskItem}
+      >
+        <View style={styles.taskTextContainer}>
+          <Text style={[styles.taskText, item.done && styles.doneText]}>{item.description}</Text>
+        </View>
+        <TouchableOpacity onPress={() => showDeleteConfirmationModal(item.id)}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    )}
+    ListFooterComponent={
+      <Modal visible={showDeleteConfirmation} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalText}>Are you sure you want to delete this task?</Text>
+          <TouchableOpacity onPress={deleteTask} style={styles.deleteButton}>
+            <Text style={styles.buttonText}>Delete</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowDeleteConfirmation(false)} style={styles.cancelButton}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    }
+  />
+</KeyboardAvoidingView>
+ );
 };
 
 const styles = StyleSheet.create({
