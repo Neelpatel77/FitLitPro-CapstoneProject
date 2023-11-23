@@ -62,7 +62,14 @@ const ProgressTracker = () => {
       },
     ],
   };
-  
+
+  const handleMeasurementChange = (text) => {
+    if (/^\d+$/.test(text)) { // Check if the text is a number
+      alert('You cannot enter a number in this field.');
+    } else {
+      setMeasurement(text);
+    }
+  };
 
   return (
 <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -78,12 +85,12 @@ const ProgressTracker = () => {
             onChange={(event, date) => setSelectedDate(date || selectedDate)}
           />
         </View>
-        <TextInput
-          style={styles.input}
-          value={measurement}
-          onChangeText={setMeasurement}
-          placeholder="Enter Measurement (e.g., Weight, Waist)"
-        />
+<TextInput
+              style={styles.input}
+              value={measurement}
+              onChangeText={handleMeasurementChange} // Updated to use the new function
+              placeholder="Enter Measurement (e.g., Weight, Waist)"
+            />
         <TextInput
           style={styles.input}
           value={value}

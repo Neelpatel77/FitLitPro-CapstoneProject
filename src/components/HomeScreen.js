@@ -52,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
     const todaySleep = await AsyncStorage.getItem(`@sleep_${today}`);
     if (todayWater) {
       setWaterIntake(parseFloat(todayWater));
-      setWaterPercentage(`${(parseFloat(todayWater) / 6 * 100).toFixed(0)}%`);
+      setWaterPercentage(`${(parseFloat(todayWater) / 4 * 100).toFixed(0)}%`);
     }
     if (todaySleep) {
       setSleepDuration(parseFloat(todaySleep));
