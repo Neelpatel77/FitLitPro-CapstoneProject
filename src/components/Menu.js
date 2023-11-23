@@ -36,7 +36,7 @@ const Menu = () => {
             <Text style={styles.optionText}>Achievements</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateTo('Progress')} style={styles.option}>
-            <Text style={styles.optionText}>Progress Tracker</Text>
+            <Text style={styles.optionText}>Progress</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateTo('Todo')} style={styles.option}>
             <Text style={styles.optionText}>Todo List</Text>

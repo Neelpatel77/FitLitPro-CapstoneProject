@@ -64,7 +64,7 @@ const ProgressTracker = () => {
   };
 
   const handleMeasurementChange = (text) => {
-    if (/^\d+$/.test(text)) { 
+    if (/^\d+$/.test(text)) { // Check if the text is a number
       alert('You cannot enter a number in this field.');
     } else {
       setMeasurement(text);
