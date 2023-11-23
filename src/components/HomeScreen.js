@@ -4,7 +4,7 @@ import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NutritionComponent from './NutritionComponent';
 
-// ... rest of your component code ...
+ 
 
 const HomeScreen = ({ navigation }) => {
   const scaleValue = new Animated.Value(0);
@@ -83,6 +83,12 @@ const HomeScreen = ({ navigation }) => {
     setSleepPercentage(`${(value / 8 * 100).toFixed(0)}%`);
     saveData('sleep', value);
   };
+  const renderHistoryItem = (item, index) => (
+    <View key={index} style={customStyles.historyItem}>
+      <Text style={customStyles.historyDate}>{item.date}</Text>
+      <Text style={customStyles.historyValue}>{item.value}</Text>
+    </View>
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -136,12 +142,43 @@ const HomeScreen = ({ navigation }) => {
             <Text style={customStyles.trackerPercentage}>{sleepPercentage}</Text>
           </View>
         </View>
+
+        <View style={customStyles.historyContainer}>
+        <Text style={customStyles.historyTitle}>Water Intake History</Text>
+        {waterHistory.map(renderHistoryItem)}
+
+        <Text style={customStyles.historyTitle}>Sleep Duration History</Text>
+        {sleepHistory.map(renderHistoryItem)}
+      </View>
       </ScrollView>
     </View>
   );
 };
 
 const customStyles = StyleSheet.create({
+
+  historyContainer: {
+    marginTop: 20,
+  },
+  historyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  historyItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  historyDate: {
+    fontSize: 16,
+    color: '#666',
+  },
+  historyValue: {
+    fontSize: 16,
+    color: '#666',
+  },
+  
   headerContainer: {
     alignItems: 'center',
     marginBottom: 20,
