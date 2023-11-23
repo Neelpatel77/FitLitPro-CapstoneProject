@@ -76,7 +76,7 @@ const ProgressTracker = () => {
   <FlatList
     ListHeaderComponent={
       <>
-        <Text style={styles.header}>Progress Tracker</Text>
+        <Text style={styles.header}>Progress</Text>
         <View style={styles.datePickerContainer}>
           <DateTimePicker
             value={selectedDate}
