@@ -72,17 +72,19 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const handleWaterChange = (value) => {
-    setWaterIntake(value);
-    setWaterPercentage(`${(value / 4 * 100).toFixed(0)}%`);
-    saveData('water', value);
-  };
+// Update the handleWaterChange for the new maximum value of 10L
+const handleWaterChange = (value) => {
+  setWaterIntake(value);
+  setWaterPercentage(`${(value / 10 * 100).toFixed(0)}%`);
+  saveData('water', value);
+};
 
-  const handleSleepChange = (value) => {
-    setSleepDuration(value);
-    setSleepPercentage(`${(value / 8 * 100).toFixed(0)}%`);
-    saveData('sleep', value);
-  };
+// Update the handleSleepChange for the new maximum value of 24 hours
+const handleSleepChange = (value) => {
+  setSleepDuration(value);
+  setSleepPercentage(`${(value / 24 * 100).toFixed(0)}%`);
+  saveData('sleep', value);
+};
   const renderHistoryItem = (item, index) => (
     <View key={index} style={customStyles.historyItem}>
       <Text style={customStyles.historyDate}>{item.date}</Text>
@@ -107,12 +109,12 @@ const HomeScreen = ({ navigation }) => {
         
         {/* Water Tracker */}
         <View style={customStyles.trackerContainer}>
-          <Text style={customStyles.trackerTitle}>Water Tracker</Text>
+          <Text style={customStyles.trackerTitle}>Water Tracker (Max 10L)</Text>
           <Text style={customStyles.trackerInfo}>Current Intake: {waterIntake.toFixed(1)} Liters</Text>
           <Slider
             style={{ width: '100%', height: 40 }}
             minimumValue={0}
-            maximumValue={4}
+            maximumValue={10}
             step={0.1}
             value={waterIntake}
             onValueChange={handleWaterChange}
@@ -126,12 +128,12 @@ const HomeScreen = ({ navigation }) => {
 
 {/* Sleep Tracker */}
 <View style={customStyles.trackerContainer}>
-          <Text style={customStyles.trackerTitle}>Sleep Tracker</Text>
+          <Text style={customStyles.trackerTitle}>Sleep Tracker (Max 24hrs)</Text>
           <Text style={customStyles.trackerInfo}>Duration: {sleepDuration.toFixed(1)} hrs</Text>
           <Slider
             style={{ width: '100%', height: 40 }}
             minimumValue={0}
-            maximumValue={8}
+            maximumValue={24}
             step={0.1}
             value={sleepDuration}
             onValueChange={handleSleepChange}
@@ -143,13 +145,17 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={customStyles.historyContainer}>
-        <Text style={customStyles.historyTitle}>Water Intake History</Text>
-        {waterHistory.map(renderHistoryItem)}
+{/* Water History Section */}
+<View style={customStyles.historyContainer}>
+          <Text style={customStyles.historyTitle}>Water Intake History</Text>
+          {waterHistory.map(renderHistoryItem)}
+        </View>
 
-        <Text style={customStyles.historyTitle}>Sleep Duration History</Text>
-        {sleepHistory.map(renderHistoryItem)}
-      </View>
+        {/* Sleep History Section */}
+        <View style={customStyles.historyContainer}>
+          <Text style={customStyles.historyTitle}>Sleep Duration History</Text>
+          {sleepHistory.map(renderHistoryItem)}
+        </View>
       </ScrollView>
     </View>
   );
