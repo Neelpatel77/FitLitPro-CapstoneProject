@@ -52,11 +52,11 @@ const HomeScreen = ({ navigation }) => {
     const todaySleep = await AsyncStorage.getItem(`@sleep_${today}`);
     if (todayWater) {
       setWaterIntake(parseFloat(todayWater));
-      setWaterPercentage(`${(parseFloat(todayWater) / 4 * 100).toFixed(0)}%`);
+      setWaterPercentage(`${(parseFloat(todayWater) / 10 * 100).toFixed(0)}%`);
     }
     if (todaySleep) {
       setSleepDuration(parseFloat(todaySleep));
-      setSleepPercentage(`${(parseFloat(todaySleep) / 8 * 100).toFixed(0)}%`);
+      setSleepPercentage(`${(parseFloat(todaySleep) / 24 * 100).toFixed(0)}%`);
     }
   };
 
@@ -75,9 +75,19 @@ const HomeScreen = ({ navigation }) => {
 // Update the handleWaterChange for the new maximum value of 10L
 const handleWaterChange = (value) => {
   setWaterIntake(value);
-  setWaterPercentage(`${(value / 10 * 100).toFixed(0)}%`);
+  const percentage = (value / 10) * 100; // Calculate percentage based on 10L max
+  setWaterPercentage(`${percentage > 100 ? 100 : percentage.toFixed(0)}%`); // Ensure it does not exceed 100%
   saveData('water', value);
 };
+
+
+
+// const handleSleepChange = (value) => {
+//   setSleepDuration(value);
+//   const percentage = (value / 24) * 100; // Calculate percentage based on 24hrs max
+//   setSleepPercentage(`${percentage > 100 ? 100 : percentage.toFixed(0)}%`); // Ensure it does not exceed 100%
+//   saveData('sleep', value);
+// };
 
 // Update the handleSleepChange for the new maximum value of 24 hours
 const handleSleepChange = (value) => {
