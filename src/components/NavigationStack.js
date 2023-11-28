@@ -23,7 +23,7 @@ const BottomTabNavigator = () => {
             iconName = focused ? 'calculator' : 'calculator-outline';
           } else if (route.name === 'Achievements') {
             iconName = focused ? 'trophy' : 'trophy-outline';
-          } else if (route.name === 'Progress Tracker') {
+          } else if (route.name === 'Progress') {
             iconName = focused ? 'bar-chart' : 'bar-chart-outline';
           } else if (route.name === 'Todo List') {
             iconName = focused ? 'list' : 'list-outline';
@@ -36,7 +36,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="BMI Calculator" component={BMICalculatorScreen} />
       <Tab.Screen name="Achievements" component={AchievementsScreen} />
-      <Tab.Screen name="Progress Tracker" component={ProgressTracker} />
+      <Tab.Screen name="Progress" component={ProgressTracker} />
       <Tab.Screen name="Todo List" component={TodoList} />
     </Tab.Navigator>
   );

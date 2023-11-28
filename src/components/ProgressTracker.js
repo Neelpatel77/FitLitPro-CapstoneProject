@@ -38,11 +38,26 @@ const ProgressTracker = () => {
   }, [dataEntries]);
 
   const saveEntry = () => {
-    if (measurement.trim() !== '' && value.trim() !== '') {
-      const newEntry = { date: selectedDate.getTime(), measurement, value };
-      setDataEntries([...dataEntries, newEntry]);
-      setMeasurement('');
-      setValue('');
+    if (measurement.trim() === '' || value.trim() === '') {
+      alert('Please fill in both fields.');
+      return;
+    }
+    if (isNaN(value) || value.trim() === '') {
+      alert('Please enter a valid number for the value.');
+      return;
+    }
+
+    const newEntry = { date: selectedDate.getTime(), measurement, value };
+    setDataEntries([...dataEntries, newEntry]);
+    setMeasurement('');
+    setValue('');
+  };
+
+  const handleValueChange = (text) => {
+    if (/^\d*\.?\d*$/.test(text)) { // Allows only numbers and decimal point
+      setValue(text);
+    } else {
+      alert('Please enter only numbers for the value.');
     }
   };
 
