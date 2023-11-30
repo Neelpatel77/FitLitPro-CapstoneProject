@@ -141,7 +141,7 @@ const ProgressTracker = () => {
   domainPadding={{ x: [30, 30], y: [0, 20] }}
   padding={{ top: 20, bottom: 50, left: 50, right: 50 }}
 >
-  <VictoryLine
+<VictoryLine
     data={dataEntries.map(entry => {
       const numericValue = parseFloat(entry.value);
       return {
@@ -156,15 +156,28 @@ const ProgressTracker = () => {
     }}
     labelComponent={<VictoryLabel dy={-10} />} // Adjust label position if necessary
   />
-  <VictoryAxis
+   <VictoryAxis
     fixLabelOverlap={true}
     style={{
-      axisLabel: { padding: 30 }
+      tickLabels: { fill: "#006400", fontSize: 12, padding: 5 }, // Dark green color for y-axis labels
+      axisLabel: { padding: 30 },
+      grid: { stroke: '#c8d6e5', strokeWidth: 0.25 }
     }}
     // Only show tick marks and labels for dates that have data
     tickValues={dataEntries.map(entry => new Date(entry.date))}
     tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
   />
+  <VictoryAxis
+    dependentAxis
+    style={{
+      tickLabels: { fill: "#006400", fontSize: 12, padding: 5 }, // Apply the dark green color here
+      axisLabel: { padding: 30 }
+    }}
+    tickFormat={(t) => t % 1 === 0 ? t : ''} // Only show integer ticks
+    tickValues={[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]} // Set this to the range of y-values you expect
+ 
+  />
+  
 </VictoryChart>
 
        
