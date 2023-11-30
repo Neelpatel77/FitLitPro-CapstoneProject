@@ -135,36 +135,39 @@ const ProgressTracker = () => {
         ListFooterComponent={
           <View style={styles.chartContainer}>
             <ScrollView horizontal>
-              <VictoryChart
-                height={500}
-                width={800}
-                domainPadding={{ x: [30, 30], y: [0, 20] }}
-                padding={{ top: 20, bottom: 50, left: 50, right: 50 }}
-              >
-                <VictoryLine
-                  data={dataEntries.map(entry => {
-                    const numericValue = parseFloat(entry.value);
-                    return {
-                      x: new Date(entry.date),
-                      y: isNaN(numericValue) ? 0 : numericValue,
-                      label: `${entry.measurement}: ${numericValue}` // This will label each point
-                    };
-                  })}
-                  style={{
-                    data: { stroke: "#c43a31" },
-                    labels: { fill: "#c43a31", fontSize: 12, padding: 5 }
-                  }}
-                  labelComponent={<VictoryLabel dy={-10} />} // Adjust label position if necessary
-                />
+            <VictoryChart
+  height={500}
+  width={800}
+  domainPadding={{ x: [30, 30], y: [0, 20] }}
+  padding={{ top: 20, bottom: 50, left: 50, right: 50 }}
+>
+  <VictoryLine
+    data={dataEntries.map(entry => {
+      const numericValue = parseFloat(entry.value);
+      return {
+        x: new Date(entry.date),
+        y: isNaN(numericValue) ? 0 : numericValue,
+        label: `${entry.measurement}: ${numericValue}` // Label for each point
+      };
+    })}
+    style={{
+      data: { stroke: "#c43a31" },
+      labels: { fill: "#c43a31", fontSize: 12, padding: 5 }
+    }}
+    labelComponent={<VictoryLabel dy={-10} />} // Adjust label position if necessary
+  />
+  <VictoryAxis
+    fixLabelOverlap={true}
+    style={{
+      axisLabel: { padding: 30 }
+    }}
+    // Only show tick marks and labels for dates that have data
+    tickValues={dataEntries.map(entry => new Date(entry.date))}
+    tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
+  />
+</VictoryChart>
 
-                <VictoryAxis
-                  fixLabelOverlap={true}
-                  style={{
-                    axisLabel: { padding: 30 }
-                  }}
-                  tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
-                />
-              </VictoryChart>
+       
             </ScrollView>
 
 
