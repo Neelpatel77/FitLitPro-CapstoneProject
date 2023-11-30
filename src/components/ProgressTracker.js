@@ -168,7 +168,7 @@ const ProgressTracker = () => {
             </ScrollView>
 
 
-            <Text style={styles.buttonText}>-- Progress Tracker --</Text>
+            <Text style={styles.buttonText1}>-- Progress Tracker --</Text>
 
           </View>
         }
@@ -207,6 +207,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  buttonText1: {
     color: '#000080',
     textAlign: 'center',
   },
