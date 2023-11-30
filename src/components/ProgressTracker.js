@@ -105,7 +105,7 @@ const ProgressTracker = () => {
               style={styles.input}
               value={measurement}
               onChangeText={handleMeasurementChange}
-              placeholder="Enter Measurement (e.g., Weight, Waist)"
+              placeholder="Enter Measurement (e.g., Weight)"
             />
             <TextInput
               style={styles.input}
