@@ -50,27 +50,32 @@ const HomeScreen = ({ navigation }) => {
     // Load today's data to display in the tracker
     const todayWater = await AsyncStorage.getItem(`@water_${today}`);
     const todaySleep = await AsyncStorage.getItem(`@sleep_${today}`);
-    if (todayWater) {
-      setWaterIntake(parseFloat(todayWater));
-      setWaterPercentage(`${(parseFloat(todayWater) / 10 * 100).toFixed(0)}%`);
-    }
-    if (todaySleep) {
-      setSleepDuration(parseFloat(todaySleep));
-      setSleepPercentage(`${(parseFloat(todaySleep) / 24 * 100).toFixed(0)}%`);
-    }
-  };
+// Inside the loadData function
+if (todayWater) {
+  const intake = parseFloat(todayWater).toFixed(2);
+  setWaterIntake(intake);
+  setWaterPercentage(`${(intake / 10 * 100).toFixed(0)}%`);
+}
+if (todaySleep) {
+  const duration = parseFloat(todaySleep).toFixed(2);
+  setSleepDuration(duration);
+  setSleepPercentage(`${(duration / 24 * 100).toFixed(0)}%`);
+}
 
 
-  const saveData = async (type, value) => {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      await AsyncStorage.setItem(`@${type}_${today}`, value.toString());
-      loadData(); // Reload data to update history
-    } catch (e) {
-      // handle error
-      console.error(e);
-    }
-  };
+
+const saveData = async (type, value) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    // Use toFixed(2) here if value is a number and you want to limit the decimal places
+    await AsyncStorage.setItem(`@${type}_${today}`, String(parseFloat(value).toFixed(2)));
+    loadData(); // Reload data to update history
+  } catch (e) {
+    // handle error
+    console.error(e);
+  }
+};
+
 
 // Update the handleWaterChange for the new maximum value of 10L
 const handleWaterChange = (value) => {
@@ -95,12 +100,14 @@ const handleSleepChange = (value) => {
   setSleepPercentage(`${(value / 24 * 100).toFixed(0)}%`);
   saveData('sleep', value);
 };
-  const renderHistoryItem = (item, index) => (
-    <View key={index} style={customStyles.historyItem}>
-      <Text style={customStyles.historyDate}>{item.date}</Text>
-      <Text style={customStyles.historyValue}>{item.value}</Text>
-    </View>
-  );
+
+const renderHistoryItem = (item, index) => (
+  <View key={index} style={customStyles.historyItem}>
+    <Text style={customStyles.historyDate}>{item.date}</Text>
+    {/* Use toFixed(2) to format the number to two decimal places */}
+    <Text style={customStyles.historyValue}>{parseFloat(item.value).toFixed(2)}</Text>
+  </View>
+);
 
   return (
     <View style={{ flex: 1 }}>
