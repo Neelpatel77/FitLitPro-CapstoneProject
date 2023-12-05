@@ -77,13 +77,13 @@ const NutritionComponent = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5', // Set a neutral background color for the container
   },
 
   input: {
@@ -92,20 +92,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 10,
+    borderRadius: 5, // Optional: Add rounded corners to the input field
   },
   infoText: {
     fontSize: 14,
     marginBottom: 10,
   },
   infoContainer: {
-    backgroundColor: 'red' ,
+    backgroundColor: '#4CAF50', // Use a more soothing color like green
     alignItems: 'center',
+    padding: 15, // Add padding for better spacing
+    borderRadius: 5, // Optional: Add rounded corners
     marginTop: 20,
   },
   foodName: {
     fontSize: 18,
+    color: '#ffffff', // White color for better contrast on the green background
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  // Add a new style for the button
+  button: {
+    backgroundColor: '#2196F3', // A pleasant blue color for the button
+    color: '#ffffff', // White color text for the button
+  },
+  buttonText: {
+    color: '#ffffff', // Ensure button text is white for better readability
   },
 });
 
