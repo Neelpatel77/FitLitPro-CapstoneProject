@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Animated, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Animated, ScrollView, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NutritionComponent from './NutritionComponent';
 
- 
-
 const HomeScreen = ({ navigation }) => {
   const scaleValue = new Animated.Value(0);
-  const [waterIntake, setWaterIntake] = useState(0);
-  const [sleepDuration, setSleepDuration] = useState(0);
-  const [waterPercentage, setWaterPercentage] = useState('0%');
-  const [sleepPercentage, setSleepPercentage] = useState('0%');
+  const [waterIntake, setWaterIntake] = useState('0.000');
+  const [sleepDuration, setSleepDuration] = useState('0.000');
+  const [waterPercentage, setWaterPercentage] = useState('0.00%'); // Updated to show 2 decimal places
+  const [sleepPercentage, setSleepPercentage] = useState('0.00%'); // Updated to show 2 decimal places
   const [waterHistory, setWaterHistory] = useState([]);
   const [sleepHistory, setSleepHistory] = useState([]);
 
   useEffect(() => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      friction: 3,
-      tension: 40,
-      useNativeDriver: true,
-    }).start();
+    Animated.spring(scaleValue, { toValue: 1, friction: 3, tension: 40, useNativeDriver: true }).start();
     loadData();
   }, []);
 
@@ -33,107 +26,77 @@ const HomeScreen = ({ navigation }) => {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split('T')[0];
-
       const storedWater = await AsyncStorage.getItem(`@water_${dateString}`);
       const storedSleep = await AsyncStorage.getItem(`@sleep_${dateString}`);
-
-      if (storedWater) {
-        newWaterHistory.push({ date: dateString, value: storedWater });
-      }
-      if (storedSleep) {
-        newSleepHistory.push({ date: dateString, value: storedSleep });
-      }
+      if (storedWater) newWaterHistory.push({ date: dateString, value: storedWater });
+      if (storedSleep) newSleepHistory.push({ date: dateString, value: storedSleep });
     }
     setWaterHistory(newWaterHistory);
     setSleepHistory(newSleepHistory);
-
-    // Load today's data to display in the tracker
     const todayWater = await AsyncStorage.getItem(`@water_${today}`);
     const todaySleep = await AsyncStorage.getItem(`@sleep_${today}`);
-// Inside the loadData function
-if (todayWater) {
-  const intake = parseFloat(todayWater).toFixed(2);
-  setWaterIntake(intake);
-  setWaterPercentage(`${(intake / 10 * 100).toFixed(0)}%`);
-}
-if (todaySleep) {
-  const duration = parseFloat(todaySleep).toFixed(2);
-  setSleepDuration(duration);
-  setSleepPercentage(`${(duration / 24 * 100).toFixed(0)}%`);
-}
+    if (todayWater) {
+      setWaterIntake(todayWater);
+      setWaterPercentage(`${(parseFloat(todayWater) / 10 * 100).toFixed(2)}%`); // Updated to show 2 decimal places
+    }
+    if (todaySleep) {
+      setSleepDuration(todaySleep);
+      setSleepPercentage(`${(parseFloat(todaySleep) / 24 * 100).toFixed(2)}%`); // Updated to show 2 decimal places
+    }
+  };
 
-
-
-const saveData = async (type, value) => {
-  try {
+  const saveData = async (type, value) => {
     const today = new Date().toISOString().split('T')[0];
-    // Use toFixed(2) here if value is a number and you want to limit the decimal places
-    await AsyncStorage.setItem(`@${type}_${today}`, String(parseFloat(value).toFixed(2)));
-    loadData(); // Reload data to update history
-  } catch (e) {
-    // handle error
-    console.error(e);
-  }
-};
+    await AsyncStorage.setItem(`@${type}_${today}`, value.toString());
+    loadData();
+  };
 
+  const handleWaterChange = value => {
+    const formattedValue = parseFloat(value).toPrecision(4); // Limit precision to 3 decimal places
+    setWaterIntake(formattedValue); // Store the string representation
+    const percentage = (value / 10) * 100;
+    setWaterPercentage(`${percentage > 100 ? 100 : percentage.toPrecision(2)}%`); // Updated to show 2 decimal places
+    saveData('water', formattedValue);
+  };
+  
+  const handleSleepChange = value => {
+    const formattedValue = parseFloat(value).toPrecision(4); // Limit precision to 3 decimal places
+    setSleepDuration(formattedValue); // Store the string representation
+    const percentage = (value / 24) * 100;
+    setSleepPercentage(`${percentage > 100 ? 100 : percentage.toPrecision(2)}%`); // Updated to show 2 decimal places
+    saveData('sleep', formattedValue);
+  };
 
-// Update the handleWaterChange for the new maximum value of 10L
-const handleWaterChange = (value) => {
-  setWaterIntake(value);
-  const percentage = (value / 10) * 100; // Calculate percentage based on 10L max
-  setWaterPercentage(`${percentage > 100 ? 100 : percentage.toFixed(0)}%`); // Ensure it does not exceed 100%
-  saveData('water', value);
-};
-
-
-
-// const handleSleepChange = (value) => {
-//   setSleepDuration(value);
-//   const percentage = (value / 24) * 100; // Calculate percentage based on 24hrs max
-//   setSleepPercentage(`${percentage > 100 ? 100 : percentage.toFixed(0)}%`); // Ensure it does not exceed 100%
-//   saveData('sleep', value);
-// };
-
-// Update the handleSleepChange for the new maximum value of 24 hours
-const handleSleepChange = (value) => {
-  setSleepDuration(value);
-  setSleepPercentage(`${(value / 24 * 100).toFixed(0)}%`);
-  saveData('sleep', value);
-};
-
-const renderHistoryItem = (item, index) => (
-  <View key={index} style={customStyles.historyItem}>
-    <Text style={customStyles.historyDate}>{item.date}</Text>
-    {/* Use toFixed(2) to format the number to two decimal places */}
-    <Text style={customStyles.historyValue}>{parseFloat(item.value).toFixed(2)}</Text>
-  </View>
-);
+  const renderHistoryItem = (item, index) => (
+    <View key={index} style={customStyles.historyItem}>
+      <Text style={customStyles.historyDate}>{item.date}</Text>
+      <Text style={customStyles.historyValue}>{item.value}</Text>
+    </View>
+  );
 
   return (
     <View style={{ flex: 1 }}>
-    <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
-      <View style={customStyles.headerContainer}>
-        <Animated.Text style={[customStyles.header, { transform: [{ scale: scaleValue }] }]}>
-          FitLit Pro by Neel Patel!
-        </Animated.Text>
-        <Text style={customStyles.subheader}>Your Fitness Dashboard</Text>
-      </View>
-
-      <View style={customStyles.sectionContainer}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+        <View style={customStyles.headerContainer}>
+          <Animated.Text style={[customStyles.header, { transform: [{ scale: scaleValue }] }]}>FitLit Pro by Neel Patel!</Animated.Text>
+          <Text style={customStyles.subheader}>Your Fitness Dashboard</Text>
+        </View>
+        <View style={customStyles.sectionContainer}>
           <NutritionComponent />
         </View>
 
-        
-        {/* Water Tracker */}
+        {/* Water Tracker Section */}
         <View style={customStyles.trackerContainer}>
           <Text style={customStyles.trackerTitle}>Water Tracker (Max 10L)</Text>
-          <Text style={customStyles.trackerInfo}>Current Intake: {waterIntake.toFixed(1)} Liters</Text>
+          <Text style={customStyles.trackerInfo}>
+            Current Intake: {waterIntake} Liters
+          </Text>
           <Slider
             style={{ width: '100%', height: 40 }}
             minimumValue={0}
             maximumValue={10}
-            step={0.1}
-            value={waterIntake}
+            step={0.001}
+            value={parseFloat(waterIntake)}
             onValueChange={handleWaterChange}
             minimumTrackTintColor="#007BFF"
             maximumTrackTintColor="#000000"
@@ -143,16 +106,18 @@ const renderHistoryItem = (item, index) => (
           </View>
         </View>
 
-{/* Sleep Tracker */}
-<View style={customStyles.trackerContainer}>
+        {/* Sleep Tracker Section */}
+        <View style={customStyles.trackerContainer}>
           <Text style={customStyles.trackerTitle}>Sleep Tracker (Max 24hrs)</Text>
-          <Text style={customStyles.trackerInfo}>Duration: {sleepDuration.toFixed(1)} hrs</Text>
+          <Text style={customStyles.trackerInfo}>
+            Duration: {sleepDuration} hrs
+          </Text>
           <Slider
             style={{ width: '100%', height: 40 }}
             minimumValue={0}
             maximumValue={24}
-            step={0.1}
-            value={sleepDuration}
+            step={0.001}
+            value={parseFloat(sleepDuration)}
             onValueChange={handleSleepChange}
             minimumTrackTintColor="#007BFF"
             maximumTrackTintColor="#000000"
@@ -162,13 +127,10 @@ const renderHistoryItem = (item, index) => (
           </View>
         </View>
 
-{/* Water History Section */}
-<View style={customStyles.historyContainer}>
+        <View style={customStyles.historyContainer}>
           <Text style={customStyles.historyTitle}>Water Intake History</Text>
           {waterHistory.map(renderHistoryItem)}
         </View>
-
-        {/* Sleep History Section */}
         <View style={customStyles.historyContainer}>
           <Text style={customStyles.historyTitle}>Sleep Duration History</Text>
           {sleepHistory.map(renderHistoryItem)}
@@ -179,7 +141,6 @@ const renderHistoryItem = (item, index) => (
 };
 
 const customStyles = StyleSheet.create({
-
   historyContainer: {
     marginTop: 20,
   },
@@ -201,7 +162,6 @@ const customStyles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-
   headerContainer: {
     alignItems: 'center',
     marginBottom: 20,
@@ -252,8 +212,6 @@ const customStyles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
- 
 });
-
 
 export default HomeScreen;
