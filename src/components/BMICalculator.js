@@ -8,21 +8,39 @@ const BodyMassIndexCalculator = () => {
   const [bmiResult, setBmiResult] = useState('');
 
   const calculateBMI = () => {
-    if (!bodyWeight || !bodyHeight) {
+    // Check for empty fields
+    if (bodyWeight.trim() === '' || bodyHeight.trim() === '') {
       alert('Please enter both weight and height.');
+      return;
+    }
+  
+    // Validate that input is numeric
+    if (isNaN(bodyWeight) || isNaN(bodyHeight)) {
+      alert('Please enter valid numbers for weight and height.');
       return;
     }
   
     const weightInKg = parseFloat(bodyWeight);
     const heightInM = parseFloat(bodyHeight) / 100;
   
-    // Check for division by zero
+    // Check for zero values
     if (weightInKg === 0 || heightInM === 0) {
       alert("Math error: Can't divide by zero.");
       return;
     }
   
+    // Further validation for non-numeric values
+    if (isNaN(weightInKg) || isNaN(heightInM)) {
+      alert('Non-numeric values detected. Please enter numbers only.');
+      return;
+    }
+  
     const calculatedBMI = weightInKg / (heightInM * heightInM);
+    if (!isFinite(calculatedBMI)) {
+      alert("Math error: Can't divide by zero.");
+      return;
+    }
+  
     const calculatedBMIRounded = calculatedBMI.toFixed(2);
     setBmiResult(calculatedBMIRounded);
   

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
 import { VictoryLine, VictoryChart, VictoryAxis } from 'victory-native';
 import { VictoryLabel } from 'victory-native';
-import { Picker } from '@react-native-picker/picker'; 
+import { Picker } from '@react-native-picker/picker';
 
 
 import { LineChart } from 'react-native-chart-kit';
@@ -42,7 +42,7 @@ const ProgressTracker = () => {
     saveData();
   }, [dataEntries]);
 
-   
+
   const saveEntry = () => {
     if (measurement.trim() === '' || value.trim() === '' || selectedUnit === '') {
       alert('Please fill in all fields and select a unit.');
@@ -56,7 +56,7 @@ const ProgressTracker = () => {
       alert('Please select the measurement unit between cm and kg.');
       return;
     }
-  
+
     const newEntry = {
       date: selectedDate.getTime(),
       measurement,
@@ -68,7 +68,7 @@ const ProgressTracker = () => {
     setValue('');
     setSelectedUnit(''); // Reset the unit selection
   };
-  
+
 
   const handleValueChange = (text) => {
     if (/^\d*\.?\d*$/.test(text)) { // Allows only numbers and decimal point
@@ -130,24 +130,24 @@ const ProgressTracker = () => {
               keyboardType="numeric"
               placeholder="Enter Value"
             />
-<View style={styles.pickerContainer}>
-  <Text style={styles.pickerLabel}>Select Unit:</Text>
- 
- 
- 
- 
-  <Picker
-  selectedValue={selectedUnit}
-  style={styles.picker}
-  onValueChange={(itemValue, itemIndex) => setSelectedUnit(itemValue)}
-  itemStyle={styles.itemStyle} // Apply the style here
->
-  <Picker.Item label="Please select a unit" value="" />
-  <Picker.Item label="Kilograms (kg)" value="kg" />
-  <Picker.Item label="Centimeters (cm)" value="cm" />
-</Picker>
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerLabel}>Select Unit:</Text>
 
-</View>
+
+
+
+              <Picker
+                selectedValue={selectedUnit}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => setSelectedUnit(itemValue)}
+                itemStyle={styles.itemStyle} // Apply the style here
+              >
+                <Picker.Item label="Please select a unit" value="" />
+                <Picker.Item label="Kilograms (kg)" value="kg" />
+                <Picker.Item label="Centimeters (cm)" value="cm" />
+              </Picker>
+
+            </View>
 
             <TouchableOpacity
               style={styles.saveButton}
@@ -167,67 +167,67 @@ const ProgressTracker = () => {
             </TouchableOpacity>
           </View>
         )}
-        
+
         ListFooterComponent={
           <View style={styles.chartContainer}>
             <ScrollView horizontal>
-           
-           
-            <VictoryChart
-  height={500}
-  width={800}
-  domainPadding={{ x: [30, 30], y: [0, 20] }}
-  domain={{ y: [0, 300] }} // Set the domain for y-axis
-
-  padding={{ top: 20, bottom: 50, left: 80, right: 80 }} // Increase left and right padding
->
 
 
-<VictoryLine
-  data={dataEntries.map(entry => {
-    const numericValue = parseFloat(entry.value);
-    return {
-      x: new Date(entry.date),
-      y: isNaN(numericValue) ? 0 : numericValue,
-      label: `${entry.measurement} (${entry.unit}) - ${numericValue}`, // Include unit in label
-    };
-  })}
-    style={{
-      data: { stroke: "#c43a31" },
-      labels: { fill: "#c43a31", fontSize: 12, padding: 5 }
-    }}
-   labelComponent={
-      <VictoryLabel
-        dy={(datum) => (datum.index === 0 ? -15 : datum.index === dataEntries.length - 1 ? 15 : -10)}
-      />
-    }
-    
-  />
-   <VictoryAxis
-    fixLabelOverlap={true}
-    style={{
-    tickLabels: { fill: "#333", fontSize: 14, padding: 5 }, // Updated style for tick labels on dependent axis
-      axisLabel: { padding: 30 },
-      grid: { stroke: '#c8d6e5', strokeWidth: 0.25 }
-    }}
-    // Only show tick marks and labels for dates that have data
-    tickValues={dataEntries.map(entry => new Date(entry.date))}
-    tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
-  />
-  <VictoryAxis
-    dependentAxis
-    style={{
-      tickLabels: { fill: "#006400", fontSize: 12, padding: 5 }, // Apply the dark green color here
-      axisLabel: { padding: 30 }
-    }}
-    tickFormat={(t) => t % 1 === 0 ? t : ''} // Only show integer ticks
-    tickValues={[10, 35, 60, 85, 110, 135, 160, 185, 210, 235]}
- 
-  />
-  
-</VictoryChart>
+              <VictoryChart
+                height={500}
+                width={800}
+                domainPadding={{ x: [30, 30], y: [0, 20] }}
+                domain={{ y: [0, 300] }} // Set the domain for y-axis
 
-       
+                padding={{ top: 20, bottom: 50, left: 80, right: 80 }} // Increase left and right padding
+              >
+
+
+                <VictoryLine
+                  data={dataEntries.map(entry => {
+                    const numericValue = parseFloat(entry.value);
+                    return {
+                      x: new Date(entry.date),
+                      y: isNaN(numericValue) ? 0 : numericValue,
+                      label: `${entry.measurement} (${entry.unit}) - ${numericValue}`, // Include unit in label
+                    };
+                  })}
+                  style={{
+                    data: { stroke: "#c43a31" },
+                    labels: { fill: "#c43a31", fontSize: 12, padding: 5 }
+                  }}
+                  labelComponent={
+                    <VictoryLabel
+                      dy={(datum) => (datum.index === 0 ? -15 : datum.index === dataEntries.length - 1 ? 15 : -10)}
+                    />
+                  }
+
+                />
+                <VictoryAxis
+                  fixLabelOverlap={true}
+                  style={{
+                    tickLabels: { fill: "#333", fontSize: 14, padding: 5 }, // Updated style for tick labels on dependent axis
+                    axisLabel: { padding: 30 },
+                    grid: { stroke: '#c8d6e5', strokeWidth: 0.25 }
+                  }}
+                  // Only show tick marks and labels for dates that have data
+                  tickValues={dataEntries.map(entry => new Date(entry.date))}
+                  tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    tickLabels: { fill: "#006400", fontSize: 12, padding: 5 }, // Apply the dark green color here
+                    axisLabel: { padding: 30 }
+                  }}
+                  tickFormat={(t) => t % 1 === 0 ? t : ''} // Only show integer ticks
+                  tickValues={[10, 35, 60, 85, 110, 135, 160, 185, 210, 235]}
+
+                />
+
+              </VictoryChart>
+
+
             </ScrollView>
 
 
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 120,
-  
+
   },
 
   pickerLabel: {
