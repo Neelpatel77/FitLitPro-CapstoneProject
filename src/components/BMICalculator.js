@@ -9,19 +9,23 @@ const BodyMassIndexCalculator = () => {
 
   const calculateBMI = () => {
     if (!bodyWeight || !bodyHeight) {
+      alert('Please enter both weight and height.');
       return;
     }
-
+  
     const weightInKg = parseFloat(bodyWeight);
     const heightInM = parseFloat(bodyHeight) / 100;
-
-
-
-
+  
+    // Check for division by zero
+    if (weightInKg === 0 || heightInM === 0) {
+      alert("Math error: Can't divide by zero.");
+      return;
+    }
+  
     const calculatedBMI = weightInKg / (heightInM * heightInM);
     const calculatedBMIRounded = calculatedBMI.toFixed(2);
     setBmiResult(calculatedBMIRounded);
-
+  
     const newBMIData = {
       weight: weightInKg,
       height: heightInM,
@@ -30,7 +34,7 @@ const BodyMassIndexCalculator = () => {
     };
     saveBMIData(newBMIData);
   };
-
+  
   const saveBMIData = async (data) => {
     try {
       const savedData = await AsyncStorage.getItem('bmiData');
