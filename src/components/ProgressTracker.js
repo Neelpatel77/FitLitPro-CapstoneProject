@@ -43,6 +43,51 @@ const ProgressTracker = () => {
   }, [dataEntries]);
 
 
+  const processChartData = (dataEntries) => {
+    // Create an object to hold the processed data, with dates as keys
+    const groupedByDate = {};
+  
+    dataEntries.forEach((entry) => {
+      const dateStr = new Date(entry.date).toLocaleDateString();
+      if (!groupedByDate[dateStr]) {
+        groupedByDate[dateStr] = [];
+      }
+      // Add the entry to the array for this date
+      groupedByDate[dateStr].push(entry);
+    });
+  
+    // Now convert the object back into an array suitable for the chart
+    const processedData = Object.keys(groupedByDate).map((date) => {
+      const entries = groupedByDate[date];
+      // You can aggregate the values here if needed, for example by summing them
+      const aggregateValue = entries.reduce((sum, entry) => sum + entry.value, 0);
+      return { date: new Date(date), value: aggregateValue };
+    });
+  
+    return processedData;
+  };
+  
+ 
+  const getUniqueDates = (dataEntries) => {
+    const uniqueDates = [];
+    const uniqueTimestamps = new Set(); // To keep track of dates we've already seen
+  
+    dataEntries.forEach((entry) => {
+      const dateStr = new Date(entry.date).toLocaleDateString();
+      if (!uniqueTimestamps.has(dateStr)) {
+        uniqueDates.push(new Date(entry.date)); // Add the unique date to the array
+        uniqueTimestamps.add(dateStr); // Remember this date string
+      }
+    });
+  
+    return uniqueDates;
+  };
+  
+
+  const processedDataEntries = processChartData(dataEntries);
+  const uniqueDates = getUniqueDates(dataEntries);
+  
+
   const saveEntry = () => {
     if (measurement.trim() === '' || value.trim() === '' || selectedUnit === '') {
       alert('Please fill in all fields and select a unit.');
@@ -194,7 +239,7 @@ const ProgressTracker = () => {
                   })}
                   style={{
                     data: { stroke: "#c43a31" },
-                    labels: { fill: "#c43a31", fontSize: 12, padding: 5 }
+                    labels: { fill: "#4c4c4c", fontSize: 12, padding: 5 }
                   }}
                   labelComponent={
                     <VictoryLabel
@@ -224,6 +269,17 @@ const ProgressTracker = () => {
                   tickValues={[10, 35, 60, 85, 110, 135, 160, 185, 210, 235]}
 
                 />
+                <VictoryAxis
+  fixLabelOverlap={true}
+  style={{
+    tickLabels: { fill: "#333", fontSize: 14, padding: 5 },
+    axisLabel: { padding: 30 },
+    grid: { stroke: '#c8d6e5', strokeWidth: 0.25 }
+  }}
+  tickValues={uniqueDates} // Use the unique dates for the tickValues
+  tickFormat={(x) => `${new Date(x).toLocaleDateString()}`}
+/>
+
 
               </VictoryChart>
 
