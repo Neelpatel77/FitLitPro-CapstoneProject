@@ -6,16 +6,15 @@ import { initializeApp } from 'firebase/app';
 
 
 
-//added firebase
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDc4xIj_02uYTR2ylwg-P7GlMUsF_aJN-I",
-  authDomain: "sprint1-fitlitpro.firebaseapp.com",
-  projectId: "sprint1-fitlitpro",
-  storageBucket: "sprint1-fitlitpro.appspot.com",
-  messagingSenderId: "490665347806",
-  appId: "1:490665347806:web:fa2875073f40778c38504f",
-  measurementId: "G-8ESTKNN0FV"
+  apiKey: "AIzaSyBIYGPXk1yspyUi5QN9mLQ3vOtC_vBpMHI",
+  authDomain: "fitlitpro-68ce4.firebaseapp.com",
+  projectId: "fitlitpro-68ce4",
+  storageBucket: "fitlitpro-68ce4.appspot.com",
+  messagingSenderId: "699330246300",
+  appId: "1:699330246300:web:5870358cf9d1d77bc25f59",
+  measurementId: "G-JL0BNDR4SZ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -55,6 +54,9 @@ const TodoList = ({ addTaskToAchievement }) => {
       } catch (error) {
         console.error('Error adding document:', error);
       }
+    } else {
+      // Show an alert if the task is empty
+      Alert.alert('Empty Task', 'Please do not enter an empty task.');
     }
   };
 
