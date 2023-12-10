@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, Modal, StyleSheet, K
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 
+import { Alert } from 'react-native';
 
 
 
